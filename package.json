@@ -1,23 +1,20 @@
 {
-  "name": "src",
+  "name": "ai-image-studio",
   "version": "0.1.0",
   "private": true,
-  "engines": {
-    "node": ">=18.0.0"
-  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "deploy": "npx @cloudflare/next-on-pages"
   },
   "dependencies": {
-    "@paypal/react-paypal-js": "^9.0.1",
-    "lucide-react": "^0.577.0",
-    "next": "15.1.6",
-    "next-auth": "^4.24.13",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "@paypal/react-paypal-js": "^8.1.3",
+    "lucide-react": "^0.468.0",
+    "next": "14.2.0",
+    "next-auth": "^4.24.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -25,7 +22,7 @@
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.19",
     "eslint": "^8",
-    "eslint-config-next": "15.1.6",
+    "eslint-config-next": "14.2.0",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.4",
     "typescript": "^5"
