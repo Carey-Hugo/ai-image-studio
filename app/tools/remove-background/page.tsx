@@ -1,9 +1,15 @@
 'use client'
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Upload, Download, Loader2, Image as ImageIcon } from "lucide-react"
 import { useSession, signIn } from "next-auth/react"
+
+declare global {
+  interface Window {
+    paypal?: any;
+  }
+}
 
 export default function RemoveBackgroundPage() {
   const { data: session } = useSession()
@@ -12,7 +18,53 @@ export default function RemoveBackgroundPage() {
   const [isProcessing, setIsProcessing] = useState(false)
   const [dragOver, setDragOver] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [showPayPal, setShowPayPal] = useState(false)
+  const [paid, setPaid] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const paypalContainerRef = useRef<HTMLDivElement>(null)
+
+  // PayPal 配置
+  const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "7W4EUL9UYCFE4"
+  const PRICE = "0.99"
+
+  useEffect(() => {
+    if (showPayPal && !paid && paypalContainerRef.current) {
+      const script = document.createElement("script")
+      script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD`
+      script.async = true
+      script.onload = () => {
+        if (window.paypal && paypalContainerRef.current) {
+          window.paypal.Buttons({
+            style: {
+              layout: "vertical",
+              color: "blue",
+              shape: "rect",
+              label: "paypal",
+            },
+            createOrder: (data: any, actions: any) => {
+              return actions.order.create({
+                purchase_units: [{
+                  amount: { value: PRICE }
+                }]
+              })
+            },
+            onApprove: async (data: any, actions: any) => {
+              const order = await actions.order.capture()
+              console.log("Payment captured:", order)
+              setPaid(true)
+              setShowPayPal(false)
+              alert("感谢支付！现在可以下载图片啦~ 🎉")
+            },
+            onError: (err: any) => {
+              console.error("PayPal Error:", err)
+              alert("支付失败，请重试")
+            }
+          }).render(paypalContainerRef.current)
+        }
+      }
+      document.body.appendChild(script)
+    }
+  }, [showPayPal, paid])
 
   const handleFile = (file: File) => {
     if (!file.type.startsWith("image/")) {
@@ -83,6 +135,12 @@ export default function RemoveBackgroundPage() {
 
   const handleDownload = () => {
     if (!resultImage) return
+    
+    if (!paid) {
+      setShowPayPal(true)
+      return
+    }
+    
     const link = document.createElement("a")
     link.download = "removed-bg.png"
     link.href = resultImage
@@ -212,7 +270,7 @@ export default function RemoveBackgroundPage() {
                 className="flex-1 max-w-xs mx-auto bg-green-600 hover:bg-green-700"
               >
                 <Download className="mr-2 w-5 h-5" />
-                Download
+                {paid ? "Download" : "💰 Download ($0.99)"}
               </Button>
               <Button
                 onClick={handleReset}
@@ -249,6 +307,16 @@ export default function RemoveBackgroundPage() {
           <p className="text-center text-gray-500 mt-4">
             Please sign in to process images
           </p>
+        )}
+
+        {showPayPal && !paid && (
+          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+            <p className="text-center text-gray-600 mb-3">💳 支付 $0.99 解锁下载</p>
+            <div ref={paypalContainerRef}></div>
+            <button onClick={() => setShowPayPal(false)} className="mt-3 w-full text-center text-gray-400 text-sm hover:text-gray-600">
+              取消
+            </button>
+          </div>
         )}
       </div>
     </div>
