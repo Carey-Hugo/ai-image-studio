@@ -347,65 +347,69 @@ export default function RemoveBackgroundPage() {
         {showPayPal && !paid && (
           <div className="mt-6 p-4 bg-gray-50 rounded-lg text-center">
             <p className="text-gray-600 mb-3">💳 Pay $0.99 to continue</p>
-            {/* PayPal 加载失败时的备选方案 */}
             <div id="paypal-button-container"></div>
-            <div className="mt-3 p-3 bg-yellow-50 rounded text-sm text-yellow-700">
-              <p>PayPal 加载中...</p>
-              <p className="text-xs mt-1">如果长时间不显示，请刷新页面重试</p>
-            </div>
             <a href="/pricing" className="block mt-3 text-sm text-gray-400 hover:text-gray-600">
               View other plans
             </a>
           </div>
         )}
 
-        {/* PayPal SDK Script */}
-        {showPayPal && !paid && (
-          <script
-            src={`https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD&intent=capture`}
-            async
-            onLoad={() => {
-              console.log("PayPal SDK loaded")
-              if (window.paypal) {
-                try {
-                  window.paypal.Buttons({
-                    style: {
-                      layout: "vertical",
-                      color: "blue",
-                      shape: "rect",
-                      label: "paypal",
-                    },
-                    createOrder: (data: any, actions: any) => {
-                      console.log("Creating order...")
-                      return actions.order.create({
-                        purchase_units: [{
-                          amount: { value: PRICE }
-                        }]
-                      })
-                    },
-                    onApprove: async (data: any, actions: any) => {
-                      console.log("Payment approved:", data)
-                      const order = await actions.order.capture()
-                      console.log("Payment captured:", order)
-                      setPaid(true)
-                      setShowPayPal(false)
-                      alert("Payment successful! You can now download your image.")
-                    },
-                    onError: (err: any) => {
-                      console.error("PayPal Error:", err)
-                      alert("Payment failed: " + err.message)
-                    }
-                  }).render("#paypal-button-container")
-                } catch(e) {
-                  console.error("PayPal render error:", e)
-                }
-              }
-            }}
-            onError={() => {
-              console.error("Failed to load PayPal SDK")
-            }}
-          ></script>
+        {showPayPal && !paid && !window.paypal && (
+          <p className="text-red-500 text-sm mt-2">Loading PayPal...</p>
         )}
+
+        {/* PayPal SDK Script - 使用 useEffect 加载 */}
+        {showPayPal && !paid && <PayPalScript />}
+      </div>
+    </div>
+  )
+}
+
+function PayPalScript() {
+  useEffect(() => {
+    const script = document.createElement("script")
+    script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD&intent=capture`
+    script.async = true
+    script.onload = () => {
+      console.log("PayPal SDK loaded")
+      if (window.paypal) {
+        window.paypal.Buttons({
+          style: {
+            layout: "vertical",
+            color: "blue",
+            shape: "rect",
+            label: "paypal",
+          },
+          createOrder: (data: any, actions: any) => {
+            return actions.order.create({
+              purchase_units: [{ amount: { value: PRICE } }]
+            })
+          },
+          onApprove: async (data: any, actions: any) => {
+            const order = await actions.order.capture()
+            setPaid(true)
+            setShowPayPal(false)
+            alert("Payment successful!")
+          },
+          onError: (err: any) => {
+            console.error("PayPal Error:", err)
+            alert("Payment failed")
+          }
+        }).render("#paypal-button-container")
+      }
+    }
+    script.onerror = () => {
+      console.error("Failed to load PayPal SDK")
+    }
+    document.body.appendChild(script)
+    
+    return () => {
+      // 清理
+    }
+  }, [])
+  
+  return null
+}
       </div>
     </div>
   )
