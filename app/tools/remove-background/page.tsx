@@ -347,11 +347,50 @@ export default function RemoveBackgroundPage() {
         {showPayPal && !paid && (
           <div className="mt-6 p-4 bg-gray-50 rounded-lg text-center">
             <p className="text-gray-600 mb-3">💳 Pay $0.99 to continue</p>
-            <div id="paypal-container"></div>
+            {/* PayPal Button Container */}
+            <div id="paypal-button-container"></div>
             <a href="/pricing" className="block mt-3 text-sm text-gray-400 hover:text-gray-600">
               View other plans
             </a>
           </div>
+        )}
+
+        {/* PayPal SDK Script */}
+        {showPayPal && !paid && (
+          <script
+            src={`https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD`}
+            async
+            onLoad={() => {
+              if (window.paypal) {
+                window.paypal.Buttons({
+                  style: {
+                    layout: "vertical",
+                    color: "blue",
+                    shape: "rect",
+                    label: "paypal",
+                  },
+                  createOrder: (data: any, actions: any) => {
+                    return actions.order.create({
+                      purchase_units: [{
+                        amount: { value: PRICE }
+                      }]
+                    })
+                  },
+                  onApprove: async (data: any, actions: any) => {
+                    const order = await actions.order.capture()
+                    console.log("Payment captured:", order)
+                    setPaid(true)
+                    setShowPayPal(false)
+                    alert("Payment successful! You can now download your image.")
+                  },
+                  onError: (err: any) => {
+                    console.error("PayPal Error:", err)
+                    alert("Payment failed, please try again.")
+                  }
+                }).render("#paypal-button-container")
+              }
+            }}
+          ></script>
         )}
       </div>
     </div>
