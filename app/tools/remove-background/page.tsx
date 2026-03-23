@@ -135,11 +135,11 @@ export default function RemoveBackgroundPage() {
 
   const handleDownload = () => {
     if (!resultImage) return
-    
-    if (!paid) {
-      setShowPayPal(true)
-      return
-    }
+    // 暂时直接下载，不弹支付
+    // if (!paid) {
+    //   setShowPayPal(true)
+    //   return
+    // }
     
     const link = document.createElement("a")
     link.download = "removed-bg.png"
