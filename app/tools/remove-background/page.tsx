@@ -126,8 +126,7 @@ export default function RemoveBackgroundPage() {
 
     // 检查是否需要付费
     if (usedFreeTrial && !paid) {
-      alert("免费试用已用完！请访问定价页面购买套餐后继续使用。")
-      window.location.href = "/pricing"
+      setShowPayPal(true)
       return
     }
 
@@ -347,9 +346,10 @@ export default function RemoveBackgroundPage() {
 
         {showPayPal && !paid && (
           <div className="mt-6 p-4 bg-gray-50 rounded-lg text-center">
-            <p className="text-gray-600 mb-3">免费试用已用完！</p>
-            <a href="/pricing" className="inline-block bg-indigo-600 text-white px-6 py-2 rounded-lg">
-              查看定价方案
+            <p className="text-gray-600 mb-3">💳 Pay $0.99 to continue</p>
+            <div id="paypal-container"></div>
+            <a href="/pricing" className="block mt-3 text-sm text-gray-400 hover:text-gray-600">
+              View other plans
             </a>
           </div>
         )}
