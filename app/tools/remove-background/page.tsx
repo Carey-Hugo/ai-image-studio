@@ -11,10 +11,6 @@ declare global {
   }
 }
 
-// PayPal 配置 - 使用新的Sandbox Client ID
-const PAYPAL_CLIENT_ID = "AZg48xWP894n1INXw5q33pkmPdbiKEnD1HJ7mnv-mrzkuifPIDckfunYbomIUG_mFQZD1NCE5TBZfb14"
-const PRICE = "0.99"
-
 export default function RemoveBackgroundPage() {
   const { data: session } = useSession()
   const [originalImage, setOriginalImage] = useState<string | null>(null)
@@ -35,6 +31,10 @@ export default function RemoveBackgroundPage() {
       setUsedFreeTrial(used === "true")
     }
   }, [])
+
+  // PayPal 配置
+  const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "AZg48xWP894n1INXw5q33pkmPdbiKEnD1HJ7mnv-mrzkuifPIDckfunYbomIUG_mFQZD1NCE5TBZfb14"
+  const PRICE = "0.99"
 
   useEffect(() => {
     if (showPayPal && !paid) {
@@ -126,12 +126,9 @@ export default function RemoveBackgroundPage() {
 
     // 检查是否需要付费
     if (usedFreeTrial && !paid) {
-      console.log("需要付费，显示支付弹窗")
       setShowPayPal(true)
       return
     }
-
-    console.log("免费试用 usedFreeTrial:", usedFreeTrial, "paid:", paid)
 
     // 标记已使用免费试用
     if (!usedFreeTrial && !paid) {
@@ -350,66 +347,13 @@ export default function RemoveBackgroundPage() {
         {showPayPal && !paid && (
           <div className="mt-6 p-4 bg-gray-50 rounded-lg text-center">
             <p className="text-gray-600 mb-3">💳 Pay $0.99 to continue</p>
-            <div id="paypal-button-container"></div>
+            <div id="paypal-container"></div>
             <a href="/pricing" className="block mt-3 text-sm text-gray-400 hover:text-gray-600">
               View other plans
             </a>
           </div>
         )}
-
-        {showPayPal && !paid && !window.paypal && (
-          <p className="text-red-500 text-sm mt-2">Loading PayPal...</p>
-        )}
-
-        {/* PayPal SDK Script - 使用 useEffect 加载 */}
-        {showPayPal && !paid && <PayPalScript />}
       </div>
     </div>
   )
-}
-
-function PayPalScript() {
-  useEffect(() => {
-    const script = document.createElement("script")
-    script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD&intent=capture`
-    script.async = true
-    script.onload = () => {
-      console.log("PayPal SDK loaded")
-      if (window.paypal) {
-        window.paypal.Buttons({
-          style: {
-            layout: "vertical",
-            color: "blue",
-            shape: "rect",
-            label: "paypal",
-          },
-          createOrder: (data: any, actions: any) => {
-            return actions.order.create({
-              purchase_units: [{ amount: { value: PRICE } }]
-            })
-          },
-          onApprove: async (data: any, actions: any) => {
-            const order = await actions.order.capture()
-            setPaid(true)
-            setShowPayPal(false)
-            alert("Payment successful!")
-          },
-          onError: (err: any) => {
-            console.error("PayPal Error:", err)
-            alert("Payment failed")
-          }
-        }).render("#paypal-button-container")
-      }
-    }
-    script.onerror = () => {
-      console.error("Failed to load PayPal SDK")
-    }
-    document.body.appendChild(script)
-    
-    return () => {
-      // 清理
-    }
-  }, [])
-  
-  return null
 }
