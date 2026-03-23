@@ -43,11 +43,11 @@ export default function RemoveBackgroundPage() {
   const handleProcess = async () => {
     if (!originalImage) return
 
-    // 不再检查登录状态，直接处理
-    // if (!session) {
-    //   signIn("google")
-    //   return
-    // }
+    // 检查登录状态
+    if (!session) {
+      signIn("google")
+      return
+    }
 
     setIsProcessing(true)
     setError(null)
