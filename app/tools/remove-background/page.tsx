@@ -37,46 +37,57 @@ export default function RemoveBackgroundPage() {
   const PRICE = "0.99"
 
   useEffect(() => {
-    if (showPayPal && !paid && paypalContainerRef.current) {
-      // 先清空容器，避免重复渲染问题
-      paypalContainerRef.current.innerHTML = ""
-      
-      const script = document.createElement("script")
-      script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD`
-      script.async = true
-      script.onload = () => {
-        if (window.paypal && paypalContainerRef.current && paypalContainerRef.current.innerHTML === "") {
-          window.paypal.Buttons({
-            style: {
-              layout: "vertical",
-              color: "blue",
-              shape: "rect",
-              label: "paypal",
-            },
-            createOrder: (data: any, actions: any) => {
-              return actions.order.create({
-                purchase_units: [{
-                  amount: { value: PRICE }
-                }]
-              })
-            },
-            onApprove: async (data: any, actions: any) => {
-              const order = await actions.order.capture()
-              console.log("Payment captured:", order)
-              setPaid(true)
-              setShowPayPal(false)
-              alert("感谢支付！现在可以下载图片啦~ 🎉")
-            },
-            onError: (err: any) => {
-              console.error("PayPal Error:", err)
-              alert("支付失败，请重试")
-            }
-          }).render(paypalContainerRef.current)
+    if (showPayPal && !paid) {
+      // 动态加载 PayPal SDK
+      const existingScript = document.getElementById("paypal-sdk")
+      if (!existingScript) {
+        const script = document.createElement("script")
+        script.id = "paypal-sdk"
+        script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD`
+        script.async = true
+        script.onload = () => {
+          renderPayPalButtons()
         }
+        document.body.appendChild(script)
+      } else {
+        // SDK 已加载，直接渲染按钮
+        setTimeout(() => renderPayPalButtons(), 100)
       }
-      document.body.appendChild(script)
     }
   }, [showPayPal, paid])
+
+  const renderPayPalButtons = () => {
+    const container = document.getElementById("paypal-container")
+    if (container && window.paypal) {
+      container.innerHTML = ""
+      window.paypal.Buttons({
+        style: {
+          layout: "vertical",
+          color: "blue",
+          shape: "rect",
+          label: "paypal",
+        },
+        createOrder: (data: any, actions: any) => {
+          return actions.order.create({
+            purchase_units: [{
+              amount: { value: PRICE }
+            }]
+          })
+        },
+        onApprove: async (data: any, actions: any) => {
+          const order = await actions.order.capture()
+          console.log("Payment captured:", order)
+          setPaid(true)
+          setShowPayPal(false)
+          alert("感谢支付！现在可以下载图片啦~ 🎉")
+        },
+        onError: (err: any) => {
+          console.error("PayPal Error:", err)
+          alert("支付失败，请重试")
+        }
+      }).render("#paypal-container")
+    }
+  }
 
   const handleFile = (file: File) => {
     if (!file.type.startsWith("image/")) {
@@ -336,7 +347,7 @@ export default function RemoveBackgroundPage() {
         {showPayPal && !paid && (
           <div className="mt-6 p-4 bg-gray-50 rounded-lg">
             <p className="text-center text-gray-600 mb-3">💳 支付 $0.99 解锁下载</p>
-            <div ref={paypalContainerRef}></div>
+            <div id="paypal-container"></div>
             <button onClick={() => setShowPayPal(false)} className="mt-3 w-full text-center text-gray-400 text-sm hover:text-gray-600">
               取消
             </button>
