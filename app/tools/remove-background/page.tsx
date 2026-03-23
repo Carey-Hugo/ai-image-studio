@@ -29,11 +29,14 @@ export default function RemoveBackgroundPage() {
 
   useEffect(() => {
     if (showPayPal && !paid && paypalContainerRef.current) {
+      // 先清空容器，避免重复渲染问题
+      paypalContainerRef.current.innerHTML = ""
+      
       const script = document.createElement("script")
       script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD`
       script.async = true
       script.onload = () => {
-        if (window.paypal && paypalContainerRef.current) {
+        if (window.paypal && paypalContainerRef.current && paypalContainerRef.current.innerHTML === "") {
           window.paypal.Buttons({
             style: {
               layout: "vertical",
@@ -135,11 +138,11 @@ export default function RemoveBackgroundPage() {
 
   const handleDownload = () => {
     if (!resultImage) return
-    // 暂时直接下载，不弹支付
-    // if (!paid) {
-    //   setShowPayPal(true)
-    //   return
-    // }
+    
+    if (!paid) {
+      setShowPayPal(true)
+      return
+    }
     
     const link = document.createElement("a")
     link.download = "removed-bg.png"
