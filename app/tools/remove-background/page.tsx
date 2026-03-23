@@ -126,9 +126,12 @@ export default function RemoveBackgroundPage() {
 
     // 检查是否需要付费
     if (usedFreeTrial && !paid) {
+      console.log("需要付费，显示支付弹窗")
       setShowPayPal(true)
       return
     }
+
+    console.log("免费试用 usedFreeTrial:", usedFreeTrial, "paid:", paid)
 
     // 标记已使用免费试用
     if (!usedFreeTrial && !paid) {
