@@ -11,6 +11,10 @@ declare global {
   }
 }
 
+// PayPal 配置 - 使用新的Sandbox Client ID
+const PAYPAL_CLIENT_ID = "AZg48xWP894n1INXw5q33pkmPdbiKEnD1HJ7mnv-mrzkuifPIDckfunYbomIUG_mFQZD1NCE5TBZfb14"
+const PRICE = "0.99"
+
 export default function RemoveBackgroundPage() {
   const { data: session } = useSession()
   const [originalImage, setOriginalImage] = useState<string | null>(null)
@@ -31,10 +35,6 @@ export default function RemoveBackgroundPage() {
       setUsedFreeTrial(used === "true")
     }
   }, [])
-
-  // PayPal 配置 - 使用新的Sandbox Client ID
-  const PAYPAL_CLIENT_ID = "AZg48xWP894n1INXw5q33pkmPdbiKEnD1HJ7mnv-mrzkuifPIDckfunYbomIUG_mFQZD1NCE5TBZfb14"
-  const PRICE = "0.99"
 
   useEffect(() => {
     if (showPayPal && !paid) {
