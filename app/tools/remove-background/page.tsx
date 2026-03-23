@@ -413,7 +413,3 @@ function PayPalScript() {
   
   return null
 }
-      </div>
-    </div>
-  )
-}
