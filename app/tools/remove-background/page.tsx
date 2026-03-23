@@ -32,8 +32,8 @@ export default function RemoveBackgroundPage() {
     }
   }, [])
 
-  // PayPal 配置
-  const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "7W4EUL9UYCFE4"
+  // PayPal 配置 - 使用新的Sandbox Client ID
+  const PAYPAL_CLIENT_ID = "AZg48xWP894n1INXw5q33pkmPdbiKEnD1HJ7mnv-mrzkuifPIDckfunYbomIUG_mFQZD1NCE5TBZfb14"
   const PRICE = "0.99"
 
   useEffect(() => {
