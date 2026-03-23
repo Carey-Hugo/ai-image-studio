@@ -4,66 +4,66 @@ import Link from "next/link"
 
 const plans = [
   {
-    name: "免费试用",
-    price: "¥0",
-    description: "首次使用免费",
+    name: "Free Trial",
+    price: "$0",
+    description: "First use free",
     features: [
-      "1 次免费处理",
-      "标准质量",
-      "适合体验",
+      "1 free image",
+      "Standard quality",
+      "Perfect for trying",
     ],
-    cta: "开始体验",
+    cta: "Try Now",
     href: "/tools/remove-background",
     icon: Zap,
     popular: false,
     bg: "bg-gradient-to-br from-green-50 to-emerald-50",
   },
   {
-    name: "按量充值",
-    price: "¥0.99",
-    description: "按需付费",
+    name: "Pay As You Go",
+    price: "$0.99",
+    description: "Pay per image",
     features: [
-      "¥0.99 / 张",
-      "无时间限制",
-      "标准质量",
-      "随时可用",
+      "$0.99 / image",
+      "No time limit",
+      "Standard quality",
+      "Anytime use",
     ],
-    cta: "立即充值",
+    cta: "Buy Now",
     href: "/tools/remove-background",
     icon: CreditCard,
     popular: true,
     bg: "bg-gradient-to-br from-indigo-50 to-purple-50",
   },
   {
-    name: "月度会员",
-    price: "¥29.9",
-    period: "/月",
-    description: "适合频繁使用",
+    name: "Monthly",
+    price: "$9.9",
+    period: "/month",
+    description: "For frequent users",
     features: [
-      "每天 50 张",
-      "高清质量",
-      "优先处理",
-      "专属客服",
+      "50 images / day",
+      "HD quality",
+      "Priority processing",
+      "Support",
     ],
-    cta: "立即订阅",
+    cta: "Subscribe",
     href: "/dashboard",
     icon: Calendar,
     popular: false,
     bg: "bg-gradient-to-br from-orange-50 to-amber-50",
   },
   {
-    name: "年度会员",
-    price: "¥299",
-    period: "/年",
-    description: "超值优惠",
+    name: "Yearly",
+    price: "$99",
+    period: "/year",
+    description: "Best value",
     features: [
-      "每天 100 张",
-      "超清质量",
-      "优先处理",
-      "专属客服",
-      "专属折扣",
+      "100 images / day",
+      "4K quality",
+      "Priority processing",
+      "Priority support",
+      "Exclusive discounts",
     ],
-    cta: "立即订阅",
+    cta: "Subscribe",
     href: "/dashboard",
     icon: Calendar,
     popular: false,
@@ -76,10 +76,10 @@ export default function PricingPage() {
     <div className="container mx-auto px-4 py-12">
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          💰 选择适合您的方案
+          💰 Choose Your Plan
         </h1>
         <p className="text-xl text-gray-600">
-          按需选择，灵活付费
+          Pay only for what you need
         </p>
       </div>
 
@@ -143,9 +143,9 @@ export default function PricingPage() {
 
       <div className="text-center mt-12">
         <p className="text-gray-500">
-          需要定制方案？{" "}
+          Need a custom solution?{" "}
           <a href="mailto:support@aiimagestudio.com" className="text-indigo-600 hover:underline">
-            联系我们
+            Contact us
           </a>
         </p>
       </div>
