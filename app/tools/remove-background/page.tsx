@@ -20,8 +20,17 @@ export default function RemoveBackgroundPage() {
   const [error, setError] = useState<string | null>(null)
   const [showPayPal, setShowPayPal] = useState(false)
   const [paid, setPaid] = useState(false)
+  const [usedFreeTrial, setUsedFreeTrial] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const paypalContainerRef = useRef<HTMLDivElement>(null)
+
+  // 检查是否使用过免费试用
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const used = localStorage.getItem("usedFreeTrial")
+      setUsedFreeTrial(used === "true")
+    }
+  }, [])
 
   // PayPal 配置
   const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "7W4EUL9UYCFE4"
@@ -102,6 +111,18 @@ export default function RemoveBackgroundPage() {
     if (!session) {
       signIn("google")
       return
+    }
+
+    // 检查是否需要付费
+    if (usedFreeTrial && !paid) {
+      setShowPayPal(true)
+      return
+    }
+
+    // 标记已使用免费试用
+    if (!usedFreeTrial && !paid) {
+      localStorage.setItem("usedFreeTrial", "true")
+      setUsedFreeTrial(true)
     }
 
     setIsProcessing(true)
