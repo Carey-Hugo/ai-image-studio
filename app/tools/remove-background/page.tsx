@@ -46,18 +46,25 @@ export default function RemoveBackgroundPage() {
         script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD&mode=sandbox`
         script.async = true
         script.onload = () => {
-          renderPayPalButtons()
+          console.log("PayPal SDK loaded successfully")
+          // 等待一下确保 window.paypal 可用
+          setTimeout(() => renderPayPalButtons(), 500)
+        }
+        script.onerror = () => {
+          console.error("Failed to load PayPal SDK")
+          alert("支付模块加载失败，请检查网络后重试")
         }
         document.body.appendChild(script)
       } else {
         // SDK 已加载，直接渲染按钮
-        setTimeout(() => renderPayPalButtons(), 100)
+        setTimeout(() => renderPayPalButtons(), 500)
       }
     }
   }, [showPayPal, paid])
 
   const renderPayPalButtons = () => {
     const container = document.getElementById("paypal-container")
+    console.log("renderPayPalButtons called", { container, paypal: !!window.paypal })
     if (container && window.paypal) {
       container.innerHTML = ""
       window.paypal.Buttons({
