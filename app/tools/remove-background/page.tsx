@@ -43,7 +43,7 @@ export default function RemoveBackgroundPage() {
       if (!existingScript) {
         const script = document.createElement("script")
         script.id = "paypal-sdk"
-        script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD&mode=sandbox`
+        script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD`
         script.async = true
         script.onload = () => {
           console.log("PayPal SDK loaded successfully")
