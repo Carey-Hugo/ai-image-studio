@@ -33,7 +33,7 @@ export default function RemoveBackgroundPage() {
   }, [])
 
   // PayPal 配置
-  const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "Acbm-I8_Xf70R2xCzp24KsmmAszZ6knPowxhHQGCAYvKkNirjGbn5sfcx80IeJDQLvq-lm8GMuqBmIXs"
+  const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "AZg48xWP894n1INXw5q33pkmPdbiKEnD1HJ7mnv-mrzkuifPIDckfunYbomIUG_mFQZD1NCE5TBZfb14"
   const PRICE = "0.99"
 
   useEffect(() => {
