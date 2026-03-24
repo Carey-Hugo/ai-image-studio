@@ -33,7 +33,7 @@ export default function RemoveBackgroundPage() {
   }, [])
 
   // PayPal 配置
-  const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "7W4EUL9UYCFE4"
+  const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "Acbm-I8_Xf70R2xCzp24KsmmAszZ6knPowxhHQGCAYvKkNirjGbn5sfcx80IeJDQLvq-lm8GMuqBmIXs"
   const PRICE = "0.99"
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function RemoveBackgroundPage() {
       if (!existingScript) {
         const script = document.createElement("script")
         script.id = "paypal-sdk"
-        script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD&mode=production`
+        script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD&mode=sandbox`
         script.async = true
         script.onload = () => {
           renderPayPalButtons()
