@@ -8,6 +8,7 @@ export const authOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET || "fallback-secret-for-development-only-12345",
   session: {
     strategy: "jwt" as const,
   },
