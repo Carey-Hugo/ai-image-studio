@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Sparkles, Zap, Shield } from "lucide-react"
+import { ArrowRight, Sparkles, Zap, Shield, Maximize2, Minimize2 } from "lucide-react"
 
 export default function HomePage() {
   return (
@@ -44,29 +44,69 @@ export default function HomePage() {
         </h2>
         
         <div className="grid md:grid-cols-3 gap-8">
-          <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
-            <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
-              <Zap className="w-6 h-6 text-purple-600" />
+          <Link href="/tools/remove-background">
+            <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow h-full">
+              <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                <Zap className="w-6 h-6 text-purple-600" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Remove Background</h3>
+              <p className="text-gray-600">
+                AI automatically detects and removes backgrounds from any image in seconds.
+                Perfect for product photos, portraits, and more.
+              </p>
             </div>
-            <h3 className="text-xl font-semibold mb-2">Remove Background</h3>
-            <p className="text-gray-600">
-              AI automatically detects and removes backgrounds from any image in seconds.
-              Perfect for product photos, portraits, and more.
-            </p>
-          </div>
+          </Link>
           
-          <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
-            <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
-              <Sparkles className="w-6 h-6 text-blue-600" />
+          <Link href="/tools/enhance">
+            <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow h-full">
+              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
+                <Sparkles className="w-6 h-6 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Enhance Photos</h3>
+              <p className="text-gray-600">
+                Transform blurry photos into crystal clear images with AI enhancement.
+                Restore old photos or fix out-of-focus shots.
+              </p>
             </div>
-            <h3 className="text-xl font-semibold mb-2">Enhance Photos</h3>
-            <p className="text-gray-600">
-              Transform blurry photos into crystal clear images with AI enhancement.
-              Restore old photos or fix out-of-focus shots.
-            </p>
-          </div>
+          </Link>
           
-          <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
+          <Link href="/tools/enlarge">
+            <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow h-full">
+              <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-4">
+                <Maximize2 className="w-6 h-6 text-orange-600" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Upscale Images</h3>
+              <p className="text-gray-600">
+                Enlarge images using AI super-resolution. Increase resolution without losing quality.
+              </p>
+            </div>
+          </Link>
+          
+          <Link href="/tools/change-background">
+            <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow h-full">
+              <div className="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center mb-4">
+                <Zap className="w-6 h-6 text-pink-600" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Change Background</h3>
+              <p className="text-gray-600">
+                Replace or remove image backgrounds with solid colors. Perfect for creating custom scenes.
+              </p>
+            </div>
+          </Link>
+          
+          <Link href="/tools/compress">
+            <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow h-full">
+              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4">
+                <Minimize2 className="w-6 h-6 text-green-600" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Compress Images</h3>
+              <p className="text-gray-600">
+                Reduce image file size without significant quality loss. Optimize for web and storage.
+              </p>
+            </div>
+          </Link>
+          
+          <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow h-full">
             <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4">
               <Shield className="w-6 h-6 text-green-600" />
             </div>

@@ -22,6 +22,15 @@ export function Header() {
           <Link href="/tools/remove-background" className="text-gray-600 hover:text-gray-900">
             Remove Background
           </Link>
+          <Link href="/tools/enhance" className="text-gray-600 hover:text-gray-900">
+            Enhance
+          </Link>
+          <Link href="/tools/enlarge" className="text-gray-600 hover:text-gray-900">
+            Enlarge
+          </Link>
+          <Link href="/tools/compress" className="text-gray-600 hover:text-gray-900">
+            Compress
+          </Link>
           <Link href="/pricing" className="text-gray-600 hover:text-gray-900">
             Pricing
           </Link>
