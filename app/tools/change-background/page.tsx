@@ -19,6 +19,7 @@ const BACKGROUND_COLORS = [
 export default function ChangeBackgroundPage() {
   const { data: session } = useSession()
   const [originalImage, setOriginalImage] = useState<string | null>(null)
+  const [originalFile, setOriginalFile] = useState<File | null>(null)
   const [resultImage, setResultImage] = useState<string | null>(null)
   const [isProcessing, setIsProcessing] = useState(false)
   const [dragOver, setDragOver] = useState(false)
@@ -37,6 +38,7 @@ export default function ChangeBackgroundPage() {
     }
 
     setError(null)
+    setOriginalFile(file) // Save the File object for API calls
     const reader = new FileReader()
     reader.onload = (e) => {
       setOriginalImage(e.target?.result as string)
@@ -53,7 +55,7 @@ export default function ChangeBackgroundPage() {
   }
 
   const handleProcess = async () => {
-    if (!originalImage) return
+    if (!originalFile) return
 
     if (!session) {
       signIn("google")
@@ -64,12 +66,8 @@ export default function ChangeBackgroundPage() {
     setError(null)
 
     try {
-      const response = await fetch(originalImage)
-      const blob = await response.blob()
-      const file = new File([blob], "image.png", { type: "image/png" })
-
       const formData = new FormData()
-      formData.append("image_file", file)
+      formData.append("image_file", originalFile!)
       formData.append("background_color", selectedColor)
 
       const res = await fetch("/api/change-background", {

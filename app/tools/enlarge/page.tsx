@@ -8,6 +8,7 @@ import { useSession, signIn } from "next-auth/react"
 export default function EnlargePage() {
   const { data: session } = useSession()
   const [originalImage, setOriginalImage] = useState<string | null>(null)
+  const [originalFile, setOriginalFile] = useState<File | null>(null)
   const [resultImage, setResultImage] = useState<string | null>(null)
   const [isProcessing, setIsProcessing] = useState(false)
   const [dragOver, setDragOver] = useState(false)
@@ -25,6 +26,7 @@ export default function EnlargePage() {
     }
 
     setError(null)
+    setOriginalFile(file) // Save the File object for API calls
     const reader = new FileReader()
     reader.onload = (e) => {
       setOriginalImage(e.target?.result as string)
@@ -41,7 +43,7 @@ export default function EnlargePage() {
   }
 
   const handleProcess = async () => {
-    if (!originalImage) return
+    if (!originalFile) return
 
     if (!session) {
       signIn("google")
@@ -52,12 +54,8 @@ export default function EnlargePage() {
     setError(null)
 
     try {
-      const response = await fetch(originalImage)
-      const blob = await response.blob()
-      const file = new File([blob], "image.png", { type: "image/png" })
-
       const formData = new FormData()
-      formData.append("image", file)
+      formData.append("image", originalFile!)
 
       const res = await fetch("/api/enlarge", {
         method: "POST",
