@@ -8,6 +8,7 @@ import imageCompression from "browser-image-compression"
 export default function CompressPage() {
   const [originalImage, setOriginalImage] = useState<string | null>(null)
   const [originalSize, setOriginalSize] = useState<number>(0)
+  const [originalFile, setOriginalFile] = useState<File | null>(null)
   const [resultImage, setResultImage] = useState<string | null>(null)
   const [resultSize, setResultSize] = useState<number>(0)
   const [isProcessing, setIsProcessing] = useState(false)
@@ -25,6 +26,7 @@ export default function CompressPage() {
     }
 
     setError(null)
+    setOriginalFile(file) // Save the original File object
     setOriginalSize(file.size)
     const reader = new FileReader()
     reader.onload = (e) => {
@@ -43,24 +45,20 @@ export default function CompressPage() {
   }
 
   const handleCompress = async () => {
-    if (!originalImage) return
+    if (!originalFile) return
 
     setIsProcessing(true)
     setError(null)
 
     try {
-      const response = await fetch(originalImage)
-      const blob = await response.blob()
-      const file = new File([blob], "image.png", { type: blob.type })
-
       const options = {
         maxSizeMB: maxSizeMB,
         maxWidthOrHeight: maxWidthOrHeight,
         useWebWorker: true,
-        fileType: blob.type,
+        fileType: originalFile.type,
       }
 
-      const compressedFile = await imageCompression(file, options)
+      const compressedFile = await imageCompression(originalFile, options)
       const resultDataUrl = await imageCompression.getDataUrlFromFile(compressedFile)
       
       setResultImage(resultDataUrl)
@@ -84,6 +82,7 @@ export default function CompressPage() {
   const handleReset = () => {
     setOriginalImage(null)
     setOriginalSize(0)
+    setOriginalFile(null)
     setResultImage(null)
     setResultSize(0)
     setError(null)
@@ -289,7 +288,7 @@ export default function CompressPage() {
           ) : (
             <Button
               onClick={handleCompress}
-              disabled={!originalImage || isProcessing}
+              disabled={!originalFile || isProcessing}
               className="flex-1 max-w-xs mx-auto bg-indigo-600 hover:bg-indigo-700"
             >
               {isProcessing ? (
