@@ -75,9 +75,11 @@ export default function RemoveBackgroundPage() {
           label: "paypal",
         },
         createOrder: (data: any, actions: any) => {
+          const userIdentifier = session?.user?.email || session?.user?.id || 'anonymous'
           return actions.order.create({
             purchase_units: [{
-              amount: { value: PRICE }
+              amount: { value: PRICE },
+              custom_id: userIdentifier // Pass user ID to webhook
             }]
           })
         },

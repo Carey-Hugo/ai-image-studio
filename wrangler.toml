@@ -1,3 +1,9 @@
 name = "ai-image-studio"
 compatibility_date = "2024-01-01"
 pages_build_output_dir = ".vercel/output/static"
+
+# D1 Database binding
+[[d1_databases]]
+binding = "DB"  # This is how you'll access it in Workers
+database_name = "pictool-db"
+database_id = "b28bce82-ea35-47c7-bf20-d31efdedbb9e"
