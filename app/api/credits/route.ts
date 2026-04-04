@@ -84,7 +84,7 @@ export async function POST(request: NextRequest, { env }: { env: Env }) {
       if (transactionId) {
         const txId = `tx_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
         await env.DB.prepare(
-          "INSERT INTO transactions (id, user_id, amount, paypal_capture_id, status) VALUES (?, ?, ?, ?, 'completed')"
+          "INSERT INTO transactions (id, user_id, amount, type) VALUES (?, ?, ?, 'completed')"
         ).bind(txId, userIdentifier, amount, transactionId).run()
       }
       

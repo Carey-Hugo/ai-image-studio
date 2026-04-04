@@ -144,8 +144,8 @@ async function handlePaymentCaptureCompleted(event: any, env: Env) {
     // Record transaction
     const txId = `tx_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
     await env.DB.prepare(
-      "INSERT INTO transactions (id, user_id, amount, paypal_capture_id, status) VALUES (?, ?, ?, ?, 'completed')"
-    ).bind(txId, customId, amount, transactionId).run()
+      "INSERT INTO transactions (id, user_id, amount, type) VALUES (?, ?, ?, 'completed')"
+    ).bind(txId, customId, Math.floor(amount), transactionId).run()
     
     console.log(`Added ${creditsToAdd} credits to user ${customId}. New balance: ${newCredits}`)
     return { success: true, creditsAdded: creditsToAdd, newBalance: newCredits }
